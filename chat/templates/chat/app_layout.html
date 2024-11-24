@@ -1,0 +1,33 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App layout</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-gray-800 text-white px-4 py-2 flex justify-between items-center">
+            <h1 class="text-xl">
+                My App
+            </h1>
+            <nav>
+                <ul class="flex space-x-4 text-sm">
+                    <li><a href="/" class="hover:text-indigo-400">Home</a></li>
+                    <li><a href="/login" class="hover:text-indigo-400">Home</a></li>
+                    <li><a href="/register" class="hover:text-indigo-400">Home</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="flex-1 p-4">
+            {% block content %}
+            {% endblock content %}
+        </main>
+        <footer class="bg-gray-800 text-white text-center p-2 text-sm">
+            © 2024 My App | All Rights Reserved
+        </footer>
+    </div>
+</body>
+</html>

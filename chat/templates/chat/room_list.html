@@ -1,0 +1,53 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Of Rooms</title>
+    {% tailwind_css %}
+  </head>
+  <body>
+    <main
+      class="mx-auto flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 text-white"
+    >
+      <section class="flex w-[30rem] flex-col space-y-10">
+        <div class="text-center text-4xl font-medium">
+          Available Rooms to Interact
+        </div>
+        <ul>
+          {% for room in rooms %} <a href="{% url "room" room.name %}">
+          <div class="bg-gray-800 shadow-lg rounded p-4 mb-2 flex justify-between items-center">
+            <div class="ml-4 flex flex-col justify-between">
+              <li>{{room.name}}</li>
+              <p class="text-sm text-gray-400 mt-2"> Created by: {{ room.creator.username }} </p>
+              {% if room.creator == user %}
+              <form action="{% url "delete_room" room.name %}" method="POST" onsubmit="return confirm('Are You Sure You want to delete this room?');" class="flex-shrink-0">
+                {% csrf_token %}
+                <button class=" bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded mt-2" type="submit">
+                  Delete
+                </button>
+              </form>
+            {% endif %}
+            </div>
+          </div>
+        </a>
+       
+          {% endfor %}
+        </ul>
+        <div class="flex text-center">
+          <a href="{% url "create_room" %}" class="bg-green-600 w-full text-white px-4 py-2 rounded hover:bg-green-500"> + Add Room</a>
+        </div>
+        <div class="flex justify-center mt-4">
+          <button
+            class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400 w-full"
+          >
+            <a href="{% url "logout" %}">Log Out
+          </button>
+        </div>
+        
+
+      </section>
+    </main>
+  </body>
+</html>

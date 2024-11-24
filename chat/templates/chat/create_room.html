@@ -1,0 +1,39 @@
+{% load static tailwind_tags %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Room</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex justify-center items-center">
+    <div class="w-[30rem] bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-center mb-6"> Create Room </h1>
+        <form method="post">
+            {% csrf_token %}
+            {% comment %} {{ form.as_p }}
+            <button class="w-full mt-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500" type="submit">
+                Create Room
+            </button> {% endcomment %}
+
+            <div>
+                <label for="id_name" class="block text-sm font-medium text-gray-300 mb-3">Room Name</label>
+                <input type="text" name="name" id="id_name" class="w-full px-3 py-2 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring focus:ring-blue-500"
+                 value="{{ form.name.value|default:"" }}" placeholder="Enter Room Name here">
+                {% if form.name.errors %}
+                    <p class="text-red-500 text-sm mt-1" >
+                        {% for error in form.name.errors %}{{ error }}{% endfor %}
+                    </p>
+                {% endif %}
+                <div>
+                    <button class="w-full py-2 bg-indigo-600 text-white font-bold rounded mt-3 hover:bg-indigo-500 transition" type="submit">Create Room</button>
+                </div>
+            </div>
+
+        </form>
+        <a href="{% url "room_list" %}" class="block text-center mt-4 text-sm text-gray-400 hover:underline">Back To Room List
+    </div>
+    
+</body>
+</html>

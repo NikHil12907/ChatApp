@@ -1,0 +1,133 @@
+{% load static %} {% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ room_name }}</title>
+    {% tailwind_css %}
+  </head>
+  <body class="bg-[#030303] w-full overflow-hidden p-5">
+    
+    <div class="flex flex-col md:flex-row h-screen bg-inherit ">
+      <aside
+        class="w-full md:w-1/4 bg-gradient-to-tr from-indigo-600 to-purple-800 text-white border-gray-300 overflow-y-auto hidden sm:block"
+      >
+        <div class="p-4 border-b border-gray-300">
+          <h1 class="text-xl font-semibold">Rooms</h1>
+          <hr class="text-white mt-4 mb-2" />
+          <ul>
+            {% for room in rooms %}
+              <li class="text-white"><a href="{% url "room" room.name %}" class="  block p-3 rounded-lg bg-inherit hover:bg-gray-800 mt-2 transition-all">{{room.name}}</a></li>
+              
+            {% endfor %}
+          </ul>
+          
+          
+        </div>
+      </aside>
+
+      <main class="flex-1 flex flex-col">
+        <header class="p-4 bg-gray-800 text-white border-b border-gray-300">
+          <h2 class="text-lg font-medium">{{ room_name }}</h2>
+        </header>
+
+        <div id="chat-log" class="flex-1 bg-gray-800 overflow-y-auto p-4"></div>
+
+        <footer class="p-4 bg-gray-800  border-t border-gray-300">
+          <div class="flex items-center space-x-2 mb-4">
+            <input
+              type="text"
+              id="chat-message-input"
+              class="flex-1 border rounded-lg focus: outline-none focus:ring focus:border-blue-400"
+            /><br />
+            <input
+              type="button"
+              value="Send"
+              class="bg-gradient-to-tr from-indigo-600 to-purple-800 rounded-lg text-white border border-white-300 px-4 py-2"
+              id="chat-message-submit"
+            /><br />
+          </div>
+        </footer>
+      </main>
+    </div>
+    {{ room_name|json_script:"room-name" }} 
+  </body>
+  <script>
+    const roomName = JSON.parse(
+      document.getElementById("room-name").textContent
+    );
+
+    const chatSocket = new WebSocket(
+      "ws://" + window.location.host + "/ws/chat/" + roomName + "/"
+    );
+
+    chatSocket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      const currentUsername = "{{ username }}";
+      const chatLog = document.querySelector("#chat-log");
+      const usernameDiv = document.createElement("div");
+      const messageDiv = document.createElement("div");
+      const msgdiv = document.createElement("div");
+      const timeStampDiv = document.createElement("div");
+      usernameDiv.textContent = data.username;
+      usernameDiv.classList.add(
+        "text-sm",
+        "font-semibold",
+        "text-white",
+        "mb-1"
+      );
+      messageDiv.textContent = data.message;
+      messageDiv.classList.add(
+        "p-3",
+        "bg-blue-300",
+        "text-gray-800",
+        "max-w-ws",
+        "inline-block",
+        "border",
+        "border-white",
+        "rounded-lg",
+        "break-words",
+        "shadow-lg"
+      );
+      timeStampDiv.textContent = data.timestamp
+      timeStampDiv.classList.add("text-xs", "text-gray-300", "mt-1")
+
+      if (data.username === currentUsername) {
+        msgdiv.classList.add("my-2", "ml-auto", "text-right");
+      } else {
+        msgdiv.classList.add("my-2", "mr-auto", "text-left");
+      }
+
+      msgdiv.appendChild(usernameDiv);
+      msgdiv.appendChild(messageDiv);
+      msgdiv.appendChild(timeStampDiv);
+      chatLog.appendChild(msgdiv);
+
+      chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    chatSocket.onclose = function (e) {
+      console.error("Chat Socket Closed unexpectedly");
+    };
+
+    document.querySelector("#chat-message-input").focus();
+    document.querySelector("#chat-message-input").onkeyup = function (e) {
+      if (e.keyCode === 13) {
+        document.querySelector("#chat-message-submit").click();
+      }
+      document.querySelector("#chat-message-submit").onclick = function (e) {
+        let messageInputDom = document.querySelector("#chat-message-input");
+        let msg = messageInputDom.value;
+        if (msg.trim() != "") {
+          chatSocket.send(
+            JSON.stringify({
+              message: msg,
+            })
+          );
+          messageInputDom.value = "";
+        }
+      };
+    };
+  </script>
+</html>

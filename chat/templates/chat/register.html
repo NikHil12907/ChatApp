@@ -1,0 +1,83 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    {% tailwind_css %}
+  </head>
+  <body class="bg-gradient-to-tr from-indigo-600 to-purple-800 text-white overflow-hidden flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-md mx-4">
+      <h1 class="text-center text-3xl font-bold mb-6">Register</h1>
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% comment %} Username {% endcomment %}
+        <div>
+          <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          name="username"
+          id="username"
+          class="w-full bg-gray-700 text-gray-200 p-3 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
+          value="{{ form.username.value }}"
+        />
+        <p class="text-sm text-red-500 mt-1">{{ form.username.errors }}</p>
+        </div>
+
+        {% comment %} email {% endcomment %}
+        <div>
+          <input
+              type="email"
+              name="email"
+              name="email"
+              id="email"
+              placeholder="email"
+              class="w-full bg-gray-700 text-gray-200 p-3 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
+              value="{{ form.email.value }}"
+            />
+           <p class="text-sm text-red-400 mt-1">{{ form.email.errors }}</p>
+        </div>
+
+        {% comment %} password1 {% endcomment %}
+        <div>
+          <input
+              type="password"
+              name="password1"
+              id="password1"
+              placeholder="Enter password"
+              class="w-full bg-gray-700 text-gray-200 p-3 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+            <p class="text-sm text-red-400 mt-1">{{ form.password1.errors }}</p>
+        </div>
+
+        {% comment %} password2 {% endcomment %}
+        <input
+              type="password"
+              name="password2"
+              id="password2"
+              placeholder="confirm password"
+              class="w-full bg-gray-700 text-gray-200 p-3 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+            <p class="text-sm text-red-400 mt-1">{{form.password2.errors}}</p>
+        <div>
+
+          {% comment %} Submit {% endcomment %}
+          <button class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-md font-semibold transition duration-200" type="submit">
+            Register
+          </button>
+        </div>
+      </form>
+      <p class="mt-4 text-center text-sm">
+        Already have an account?
+        <a href="{% url "login" %}" class="text-indigo-400 hover:underline">Login</a>
+      </p>
+    </div>
+    
+    
+    
+  </body>
+</html>

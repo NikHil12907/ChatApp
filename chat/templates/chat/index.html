@@ -1,0 +1,29 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <h4>which Chat room would you like to enter?</h4>
+    <input type="text" id="room-name-input" size="100"><br>
+    <input type="button" id="room-name-submit" value="Enter"><br>
+    <script>
+        document.querySelector('#room-name-input').focus()
+        document.querySelector('#room-name-input').onkeyup = function(e){
+            if (e.keyCode == 13){
+                document.querySelector('#room-name-submit').Click();
+            }
+            
+        }; 
+        document.querySelector('#room-name-submit').onclick = function(e){
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+
+    </script>
+</body>
+</html>
