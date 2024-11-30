@@ -23,7 +23,7 @@
           name="username"
           id="username"
           class="w-full bg-gray-700 text-gray-200 p-3 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
-          value="{{ form.username.value }}"
+          value="{{ form.username.value|default="" }}"
         />
         <p class="text-sm text-red-500 mt-1">{{ form.username.errors }}</p>
         </div>
