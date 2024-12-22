@@ -49,7 +49,7 @@ git clone https://github.com/NikHil12907/ChatApp.git
    
     - **Windows**:
       ```bash
-      venv\Scripts\activate
+      source venv\Scripts\activate
       ```
     - **macOS/Linux**:
       ```bash
